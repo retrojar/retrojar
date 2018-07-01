@@ -1,6 +1,6 @@
 {
-  "name": "retro-memo",
-  "short_name": "retro-memo",
+  "name": "RetroMemo",
+  "short_name": "RetroMemo",
   "icons": [
     {
       "src": "/img/icons/android-chrome-192x192.png",

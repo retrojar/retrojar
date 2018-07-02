@@ -1,0 +1,14 @@
+version: '3.2'
+
+services:
+    server:
+        build: ./server
+        ports:
+          - 8081:8081
+        networks:
+            - dev
+
+networks:
+    dev:
+        driver: bridge
+        attachable: true

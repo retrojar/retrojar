@@ -92,11 +92,7 @@
 
 [[projects]]
   name = "github.com/swaggo/swag"
-  packages = [
-    ".",
-    "example/celler/httputil",
-    "example/celler/model"
-  ]
+  packages = ["."]
   revision = "db2ee6c14a35e4fca95b0d75054296ef2b699050"
   version = "v1.3.2"
 
@@ -160,6 +156,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7613218500a7eb53b14e41bdaf170755966d0cb3b4e136952f084633e37791d7"
+  inputs-digest = "fbaa55146c42585be0d80c7a2c57055612fef8f03ded89135c051a4fdbfe2ab3"
   solver-name = "gps-cdcl"
   solver-version = 1

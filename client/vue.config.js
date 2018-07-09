@@ -8,7 +8,7 @@ module.exports = {
           "**/*.{html,ttf,woff,woff2,ico,js,css}"
       ],
       "swSrc": "./src/sw.js",
-      "swDest": "./public/sw.js",
+      "swDest": "./sw.js",
     }
   },
 

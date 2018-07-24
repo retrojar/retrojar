@@ -1,24 +1,20 @@
 version: '3.2'
 
 services:
-    proxy:
-        image: nginx
+    client:
+        build: ./client
+        image: 563026470921.dkr.ecr.eu-central-1.amazonaws.com/client
         ports:
-            - 8081:80
-        volumes:
-            - ./docker/proxy/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
-            - ./client/dist:/client
+            - 8080:80
+        environment:
+            - API_HOST=http://localhost:8081
         networks:
             - dev
     server:
         build: ./server
-        networks:
-            - dev
-
-    client:
-        build: ./client
-        volumes:
-            - ./client:/usr/src/app
+        image: 563026470921.dkr.ecr.eu-central-1.amazonaws.com/server
+        ports:
+            - 8081:8080
         networks:
             - dev
 

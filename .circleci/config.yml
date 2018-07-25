@@ -1,0 +1,48 @@
+version: 2
+jobs:
+  build:
+    working_directory: /app
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache py-pip=9.0.0-r1
+            pip install awscli==1.11.76
+      - run:
+          name: Build server image
+          command: |
+            docker build -t server ./server
+      - run:
+          name: Build client image
+          command: |
+            docker build -t client ./client
+      - deploy:
+          name: Deploy server image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                export CLUSTER='default'
+                export FAMILY='retrojar-api'
+                export DOCKER_IMAGE='server'
+                export TASK='server'
+                export SERVICE='retrojar-api'
+                export PORT='8080'
+                ./.circleci/aws_deploy.sh
+                return 0
+            fi
+      - deploy:
+          name: Deploy client image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                export CLUSTER='default'
+                export FAMILY='retrojar-client'
+                export DOCKER_IMAGE='client'
+                export TASK='client'
+                export SERVICE='retrojar-client'
+                export PORT='80'
+                ./.circleci/aws_deploy.sh
+                return 0
+            fi

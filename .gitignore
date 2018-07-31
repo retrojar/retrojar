@@ -3,6 +3,7 @@
 /client/dist
 
 # local env files
+.env
 .env.local
 .env.*.local
 
@@ -22,3 +23,5 @@ yarn-error.log*
 
 # go
 /server/vendor/
+
+/run/

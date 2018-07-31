@@ -3,7 +3,6 @@ version: '3.2'
 services:
     client:
         build: ./client
-        image: 563026470921.dkr.ecr.eu-central-1.amazonaws.com/client
         ports:
             - 8080:80
         environment:
@@ -12,11 +11,19 @@ services:
             - dev
     server:
         build: ./server
-        image: 563026470921.dkr.ecr.eu-central-1.amazonaws.com/server
         ports:
             - 8081:8080
         networks:
             - dev
+    db:
+        image: dwmkerr/dynamodb:latest
+        command: -dbPath /data/
+        volumes:
+          - ./run/db:/data/
+        ports:
+          - 8000:8000
+        networks:
+          - dev
 
 networks:
     dev:

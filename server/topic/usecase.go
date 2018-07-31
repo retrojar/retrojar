@@ -5,8 +5,8 @@ type useCase struct {
 }
 
 type Repository interface {
-	Save(topic *addTopicCommand) error
-	List(topic *listTopicQuery) ([]topicModel, error)
+	Save(command *addTopicCommand) error
+	List(command *listTopicQuery) ([]topicModel, error)
 }
 
 func (u *useCase) add(command *addTopicCommand) error {

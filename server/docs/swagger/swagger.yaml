@@ -37,13 +37,71 @@ definitions:
         example: a short topic description
         type: string
     type: object
-host: localhost:8081
+  user.JWTRepsonse:
+    properties:
+      jwt:
+        example: JhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOi....
+        type: string
+    type: object
+  user.LoginUrlRepsonse:
+    properties:
+      url:
+        example: http://google.com/....
+        type: string
+    type: object
+host: localhost:8080
 info:
   contact: {}
   license: {}
   title: Retro jar API
   version: "1.0"
 paths:
+  /api/v1/login/google:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.LoginUrlRepsonse'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+            type: object
+      summary: get login url
+  /api/v1/login/google/jwt:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.JWTRepsonse'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+            type: object
+      summary: get jwt
   /topics:
     post:
       consumes:

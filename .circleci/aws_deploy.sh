@@ -18,9 +18,9 @@ task_template='[{
     ],
     "environment": [
         {
-            "API_HOST": "https://api.retrojar.top",
+            "API_HOST": "https://api.retrojar.top"
         }
-    ],
+    ]
 }]'
 task_def=$(printf "$task_template" $TASK $AWS_ACCOUNT_ID $AWS_REGION $DOCKER_IMAGE $CIRCLE_SHA1 $PORT)
 echo "$task_def"

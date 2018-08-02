@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"retro-memo/server/httputil"
 	"time"
 )
 
@@ -57,25 +58,9 @@ func (h *handler) GetLoginUrl(context *gin.Context) {
 // @Failure 500 {object} httputil.HTTPError
 // @Router /api/v1/login/google/jwt [get]
 func (h *handler) GetJWT(context *gin.Context) {
-	token, err := h.config.Exchange(goContext.Background(), context.Query("code"))
+	profile, err := h.queryGoogleProfile(context.Query("code"))
 	if err != nil {
-		context.AbortWithError(http.StatusBadRequest, err)
-		return
-	}
-
-	client := h.config.Client(goContext.Background(), token)
-	email, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
-	if err != nil {
-		context.AbortWithError(http.StatusBadRequest, err)
-		return
-	}
-
-	defer email.Body.Close()
-	data, _ := ioutil.ReadAll(email.Body)
-
-	profile := googleResponse{}
-	if err := json.Unmarshal(data, &profile); err != nil {
-		context.AbortWithError(http.StatusInternalServerError, err)
+		httputil.NewError(context, http.StatusBadRequest, err)
 		return
 	}
 
@@ -87,16 +72,41 @@ func (h *handler) GetJWT(context *gin.Context) {
 		"pic":   profile.Picture,
 		"email": profile.Email,
 	})
+
 	tokenString, err := jwtToken.SignedString([]byte(h.secret))
 	if err != nil {
-		context.AbortWithError(http.StatusInternalServerError, err)
+		httputil.NewError(context, http.StatusBadRequest, err)
 		return
 	}
 
 	context.JSON(http.StatusOK, JWTRepsonse{tokenString})
 }
 
-type googleResponse struct {
+func (h *handler) queryGoogleProfile(code string) (googleProfile, error) {
+	profile := googleProfile{}
+
+	token, err := h.config.Exchange(goContext.Background(), code)
+	if err != nil {
+		return profile, err
+	}
+
+	client := h.config.Client(goContext.Background(), token)
+	userInfo, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
+	if err != nil {
+		return profile, err
+	}
+
+	defer userInfo.Body.Close()
+	data, _ := ioutil.ReadAll(userInfo.Body)
+
+	if err := json.Unmarshal(data, &profile); err != nil {
+		return profile, err
+	}
+
+	return profile, nil
+}
+
+type googleProfile struct {
 	Name    string `json:"Name"`
 	Email   string `json:"Email"`
 	Picture string `json:"Picture"`

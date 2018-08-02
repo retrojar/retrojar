@@ -18,7 +18,8 @@ task_template='[{
     ],
     "environment": [
         {
-            "API_HOST": "https://api.retrojar.top"
+            "name": "API_HOST",
+            "value": "https://api.retrojar.top"
         }
     ]
 }]'

@@ -24,25 +24,6 @@ jobs:
           name: Deploy server image
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                export CLUSTER='default'
-                export FAMILY='retrojar-api'
-                export DOCKER_IMAGE='server'
-                export TASK='server'
-                export SERVICE='retrojar-api'
-                export PORT='8080'
-                ./.circleci/aws_deploy.sh
-                return 0
-            fi
-      - deploy:
-          name: Deploy client image
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                export CLUSTER='default'
-                export FAMILY='retrojar-client'
-                export DOCKER_IMAGE='client'
-                export TASK='client'
-                export SERVICE='retrojar-client'
-                export PORT='80'
                 ./.circleci/aws_deploy.sh
                 return 0
             fi
